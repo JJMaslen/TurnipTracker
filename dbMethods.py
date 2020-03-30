@@ -17,7 +17,7 @@ def create_table(conn,create_table_sql):
     except Error as e:
         print(e)
 
-def create_entry(conn, entry):
+def add_entry(conn, entry):
 
     sql = ''' INSERT INTO turnipTable(id,name,price,date) 
               VALUES(?,?,?,?) '''
@@ -27,17 +27,25 @@ def create_entry(conn, entry):
 
 def update_entry(conn, entry):
     sql = ''' UPDATE turnipTable
-              SET price = ?'''
+              SET price = ? ,
+                  date = ?
+              WHERE id = ?'''
+
+    cur = conn.cursor()
+    cur.execute(sql, entry)
+    conn.commit()
+
+def read_table(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM turnipTable")
+
+    rows = cur.fetchall()
+    return rows
 
 def createTable():
-    pass
-def addEntry():
-    pass
-def updateEntry():
-    pass
-
-def setUp():
-    database = r"F:\Projects\Repositories\TurnipTracker\db\turnip.db"
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
 
     sql_create_turnipTable_table = """ CREATE TABLE IF NOT EXISTS turnipTable (
                                         id integer PRIMARY KEY,
@@ -48,12 +56,37 @@ def setUp():
                                     ); """
     
     conn = create_connection(database)
-    with conn:
-        thing = (1234567890, "Jordan", 600, "29/03 09:26")
-        create_entry(conn, thing)
-
     if conn is not None:
         create_table(conn, sql_create_turnipTable_table)
 
     else:
         print("Error! Cannot create the database connection")
+
+def addEntry(id, userName, price, currentTime):
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
+
+    conn = create_connection(database)
+    with conn:
+        NewEntry = (id, userName, price, currentTime)
+        add_entry(conn, NewEntry)
+
+def updateEntry(id, price, currentTime):
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
+
+    conn = create_connection(database)
+    with conn:
+        update_entry(conn, (price, currentTime, id))
+
+def readTable():
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
+
+    conn = create_connection(database)
+    with conn:
+        data = read_table(conn)
+    return data

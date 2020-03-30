@@ -19,7 +19,6 @@ async def on_ready():
     print("Turnip Tracker is online!")
     print("Name: Turnip Tracker")
     print("TD: {}".format(client.user.id))
-    dbMethods.setUp()
 
 @client.command()
 async def test(ctx):
@@ -31,12 +30,32 @@ async def test(ctx):
     await ctx.send("The current time is: {}".format(now))
 
 @client.command()
-async def Turnips(ctx):
-    pass
+async def turnips(ctx):
+    data = dbMethods.readTable()
+
+    for row in data:
+        await ctx.send("`Name: {} Price: {} Last Updated: {}`".format(row[1],row[2],row[3]))
 
 @client.command()
-async def myTurnips(ctx):
-    pass
+async def myTurnips(ctx, newPrice):
+    userID = ctx.message.author.id
+    userName = ctx.message.author.name
+    now = datetime.now().strftime('%d-%m %H:%M')
+
+    data = dbMethods.readTable()
+    inDatabase = False
+    for row in data:
+        if row[0] == userID:
+            inDatabase = True
+            
+    if inDatabase == False:
+        await ctx.send("You're not in my database, I'm adding you now!")
+        dbMethods.addEntry(userID, userName, newPrice, now)
+
+    await ctx.send("Updating your price now!")
+    dbMethods.updateEntry(userID, newPrice, now)
+
+    await ctx.send("Your new price is: {}".format(newPrice))
 
 file = open("token.txt", "r")
 token = str(file.read())
