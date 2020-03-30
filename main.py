@@ -19,6 +19,7 @@ async def on_ready():
     print("Turnip Tracker is online!")
     print("Name: Turnip Tracker")
     print("TD: {}".format(client.user.id))
+    dbMethods.createTable()
 
 @client.command()
 async def test(ctx):
@@ -33,8 +34,13 @@ async def test(ctx):
 async def turnips(ctx):
     data = dbMethods.readTable()
 
+    embed = discord.Embed(title='Turnip Prices')
     for row in data:
-        await ctx.send("`Name: {} Price: {} Last Updated: {}`".format(row[1],row[2],row[3]))
+        embed.add_field(name = 'Username', value = row[1], inline = True)
+        embed.add_field(name = 'Price', value = row[2], inline = True)
+        embed.add_field(name = 'Last Updated', value = row[3], inline = True)
+
+    await ctx.send(embed=embed)
 
 @client.command()
 async def myTurnips(ctx, newPrice):
