@@ -31,6 +31,14 @@ async def test(ctx):
     await ctx.send("The current time is: {}".format(now))
 
 @client.command()
+async def help(ctx):
+    embed = discord.Embed(title='Bot Commands')
+    embed.add_field(name = '!turnips', value = 'For current prices', inline = True)
+    embed.add_field(name = '!myTurnips *num*', value = 'For updating your price', inline = True)
+
+    await ctx.send(embed=embed)
+
+@client.command()
 async def turnips(ctx):
     data = dbMethods.readTable()
 
