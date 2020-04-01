@@ -9,6 +9,7 @@ from discord.ext import commands
 
 # Local File Imports
 import dbMethods
+import formatMethods
 
 bot_prefix = "!"
 client = commands.Bot(command_prefix=bot_prefix)
@@ -19,16 +20,18 @@ async def on_ready():
     print("Turnip Tracker is online!")
     print("Name: Turnip Tracker")
     print("TD: {}".format(client.user.id))
-    dbMethods.createTable()
+    #dbMethods.createTable()
+    #dbMethods.editTable()
 
 @client.command()
 async def test(ctx):
-    await ctx.send("Hello, this is a test!")
-    userID = ctx.message.author.id
-    userName = ctx.message.author.name
-    await ctx.send("Thank you {} , id: {}".format(userName,userID))
-    now = datetime.now().strftime('%d-%m %H:%M')
-    await ctx.send("The current time is: {}".format(now))
+    #await ctx.send("Hello, this is a test!")
+    #userID = ctx.message.author.id
+    #userName = ctx.message.author.name
+    #await ctx.send("Thank you {} , id: {}".format(userName,userID))
+    #now = datetime.now().strftime('%d-%m %H:%M')
+    #await ctx.send("The current time is: {}".format(now))
+    pass
 
 @client.command()
 async def help(ctx):
@@ -40,13 +43,13 @@ async def help(ctx):
 
 @client.command()
 async def turnips(ctx):
-    data = dbMethods.readTable()
 
+    formattedData = formatMethods.databaseConcatenater()
+    
     embed = discord.Embed(title='Turnip Prices')
-    for row in data:
-        embed.add_field(name = 'Username', value = row[1], inline = True)
-        embed.add_field(name = 'Price', value = row[2], inline = True)
-        embed.add_field(name = 'Last Updated', value = row[3], inline = True)
+    embed.add_field(name = 'Username', value = formattedData[0], inline = True)
+    embed.add_field(name = 'Price', value = formattedData[1], inline = True)
+    embed.add_field(name = 'Last Updated', value = formattedData[2], inline = True)
 
     await ctx.send(embed=embed)
 

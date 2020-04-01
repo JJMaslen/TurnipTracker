@@ -62,6 +62,19 @@ def createTable():
     else:
         print("Error! Cannot create the database connection")
 
+def editTable():
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
+
+    sql_update_turnipTable = """ ALTER TABLE turnipTable
+              ADD active text"""
+    
+    conn = create_connection(database)
+
+    c = conn.cursor()
+    c.execute(sql_update_turnipTable)
+
 def addEntry(id, userName, price, currentTime):
     file = open("databasePath.txt", "r")
     database = str(file.read())
