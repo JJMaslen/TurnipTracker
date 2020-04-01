@@ -55,24 +55,37 @@ async def turnips(ctx):
 
 @client.command()
 async def myTurnips(ctx, newPrice):
-    userID = ctx.message.author.id
-    userName = ctx.message.author.name
-    now = datetime.now().strftime('%d-%m %H:%M')
 
-    data = dbMethods.readTable()
-    inDatabase = False
-    for row in data:
-        if row[0] == userID:
-            inDatabase = True
+    errorHandler = 0
+    try:
+        test = int(newPrice) + 1
+        test = test - 1
+        if test > 1 and test <= 999:
+            errorHandler = 1
+        else:
+            await ctx.send("Please enter a whole number between 1 and 999 (Example: !myTurnips 100)")
+    except:
+        await ctx.send("Please enter a whole number between 1 and 999 (Example: !myTurnips 100)")
+
+    if errorHandler == 1:
+        userID = ctx.message.author.id
+        userName = ctx.message.author.name
+        now = datetime.now().strftime('%d-%m %H:%M')
+
+        data = dbMethods.readTable()
+        inDatabase = False
+        for row in data:
+            if row[0] == userID:
+                inDatabase = True
             
-    if inDatabase == False:
-        await ctx.send("You're not in my database, I'm adding you now!")
-        dbMethods.addEntry(userID, userName, newPrice, now)
+        if inDatabase == False:
+            await ctx.send("You're not in my database, I'm adding you now!")
+            dbMethods.addEntry(userID, userName, newPrice, now)
 
-    await ctx.send("Updating your price now!")
-    dbMethods.updateEntry(userID, newPrice, now)
+        await ctx.send("Updating your price now!")
+        dbMethods.updateEntry(userID, newPrice, now)
 
-    await ctx.send("Your new price is: {}".format(newPrice))
+        await ctx.send("Your new price is: {}".format(newPrice))     
 
 file = open("token.txt", "r")
 token = str(file.read())

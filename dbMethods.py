@@ -37,9 +37,11 @@ def update_entry(conn, entry):
 
 def read_table(conn):
 
-    sql = '''SELECT * FROM turnipTable'''
+    sql = '''SELECT * FROM turnipTable
+             ORDER BY 
+                price DESC'''
     cur = conn.cursor()
-    cur.execute("SELECT * FROM turnipTable")
+    cur.execute(sql)
 
     rows = cur.fetchall()
     return rows
