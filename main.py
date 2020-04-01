@@ -31,7 +31,8 @@ async def test(ctx):
     #await ctx.send("Thank you {} , id: {}".format(userName,userID))
     #now = datetime.now().strftime('%d-%m %H:%M')
     #await ctx.send("The current time is: {}".format(now))
-    pass
+    now = datetime.now().strftime('%d-%m')
+    print(now)
 
 @client.command()
 async def help(ctx):
@@ -52,6 +53,7 @@ async def turnips(ctx):
     embed.add_field(name = 'Last Updated', value = formattedData[2], inline = True)
 
     await ctx.send(embed=embed)
+    await ctx.message.delete()
 
 @client.command()
 async def myTurnips(ctx, newPrice):

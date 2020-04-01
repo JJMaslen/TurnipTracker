@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import dbMethods
 
 def databaseConcatenater():
@@ -8,13 +10,17 @@ def databaseConcatenater():
     updateColumn = ""
 
     for row in data:
-        nameColumn = nameColumn + str(row[1]) + "\n"
-        valueColumn = valueColumn + str(row[2]) + "\n"
-        updateColumn = updateColumn + str(row[3]) + "\n"
+        dateData = row[3].split(' ')
+        now = datetime.now().strftime('%d-%m')
+
+        if dateData[0] == now:
+            nameColumn = nameColumn + str(row[1]) + "\n"
+            valueColumn = valueColumn + str(row[2]) + "\n"
+            updateColumn = updateColumn + str(row[3]) + "\n"     
 
     nameColumn = dataFormatterGreen(nameColumn)
-    valueColumn = dataFormatterYelloe(valueColumn)
-    updateColumn = dataFormatterYelloe(updateColumn)
+    valueColumn = dataFormatterYellow(valueColumn)
+    updateColumn = dataFormatterYellow(updateColumn)
     
     return nameColumn,valueColumn,updateColumn
 
@@ -25,7 +31,7 @@ def dataFormatterGreen(text):
     formattedText = startFormat + text + endFormat
     return formattedText
 
-def dataFormatterYelloe(text):
+def dataFormatterYellow(text):
     startFormat = "```fix\n"
     endFormat = "```"
 
