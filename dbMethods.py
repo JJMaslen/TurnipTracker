@@ -36,6 +36,8 @@ def update_entry(conn, entry):
     conn.commit()
 
 def read_table(conn):
+
+    sql = '''SELECT * FROM turnipTable'''
     cur = conn.cursor()
     cur.execute("SELECT * FROM turnipTable")
 
