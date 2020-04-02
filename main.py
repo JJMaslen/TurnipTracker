@@ -89,6 +89,17 @@ async def myTurnips(ctx, newPrice):
 
         await ctx.send("Your new price is: {}".format(newPrice))     
 
+@client.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    
+    stockTicker = 694689627906506813
+    if message.channel.id == stockTicker:
+        await message.delete(delay=5.0)
+
+    await client.process_commands(message)
+
 file = open("token.txt", "r")
 token = str(file.read())
 file.close()
