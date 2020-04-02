@@ -62,12 +62,12 @@ async def myTurnips(ctx, newPrice):
     try:
         test = int(newPrice) + 1
         test = test - 1
-        if test > 1 and test <= 999:
+        if test > 10 and test <= 660:
             errorHandler = 1
         else:
-            await ctx.send("Please enter a whole number between 1 and 999 (Example: !myTurnips 100)")
+            await ctx.send("Please enter a whole number between 10 and 660 (Example: !myTurnips 100)")
     except:
-        await ctx.send("Please enter a whole number between 1 and 999 (Example: !myTurnips 100)")
+        await ctx.send("Please enter a whole number between 10 and 660 (Example: !myTurnips 100)")
 
     if errorHandler == 1:
         userID = ctx.message.author.id
