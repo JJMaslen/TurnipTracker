@@ -52,8 +52,11 @@ async def turnips(ctx):
     embed.add_field(name = 'Price', value = formattedData[1], inline = True)
     embed.add_field(name = 'Last Updated', value = formattedData[2], inline = True)
 
-    await ctx.send(embed=embed)
-    await ctx.message.delete()
+    channel = client.get_channel(694689627906506813)
+    await channel.send(embed=embed)
+
+    if ctx.message.channel.id != 694607433615540302:
+        await ctx.message.delete()
 
 @client.command()
 async def myTurnips(ctx, newPrice):
@@ -88,6 +91,8 @@ async def myTurnips(ctx, newPrice):
         dbMethods.updateEntry(userID, newPrice, now)
 
         await ctx.send("Your new price is: {}".format(newPrice))     
+
+        await turnips(ctx)
 
 @client.event
 async def on_message(message):

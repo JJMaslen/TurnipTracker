@@ -11,12 +11,21 @@ def databaseConcatenater():
 
     for row in data:
         dateData = row[3].split(' ')
-        now = datetime.now().strftime('%d-%m')
+        todayDate = datetime.now().strftime('%d-%m')
+        currentTime = datetime.now().strftime('%H')
+        
+        timeData = dateData[1].split(':')
 
-        if dateData[0] == now:
-            nameColumn = nameColumn + str(row[1]) + "\n"
-            valueColumn = valueColumn + str(row[2]) + "\n"
-            updateColumn = updateColumn + str(row[3]) + "\n"     
+        if dateData[0] == todayDate:
+
+            if int(currentTime) < 12:
+                nameColumn = nameColumn + str(row[1]) + "\n"
+                valueColumn = valueColumn + str(row[2]) + "\n"
+                updateColumn = updateColumn + str(row[3]) + "\n"
+            elif int(timeData[0]) >= 12:
+                nameColumn = nameColumn + str(row[1]) + "\n"
+                valueColumn = valueColumn + str(row[2]) + "\n"
+                updateColumn = updateColumn + str(row[3]) + "\n"                  
 
     nameColumn = dataFormatterGreen(nameColumn)
     valueColumn = dataFormatterYellow(valueColumn)
