@@ -36,8 +36,12 @@ def update_entry(conn, entry):
     conn.commit()
 
 def read_table(conn):
+
+    sql = '''SELECT * FROM turnipTable
+             ORDER BY 
+                price DESC'''
     cur = conn.cursor()
-    cur.execute("SELECT * FROM turnipTable")
+    cur.execute(sql)
 
     rows = cur.fetchall()
     return rows
@@ -61,6 +65,19 @@ def createTable():
 
     else:
         print("Error! Cannot create the database connection")
+
+def editTable():
+    file = open("databasePath.txt", "r")
+    database = str(file.read())
+    file.close()
+
+    sql_update_turnipTable = """ ALTER TABLE turnipTable
+              ADD active text"""
+    
+    conn = create_connection(database)
+
+    c = conn.cursor()
+    c.execute(sql_update_turnipTable)
 
 def addEntry(id, userName, price, currentTime):
     file = open("databasePath.txt", "r")
