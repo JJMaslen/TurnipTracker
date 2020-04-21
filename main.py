@@ -10,6 +10,7 @@ from discord.ext import commands
 # Local File Imports
 import dbMethods
 import formatMethods
+import genericBot
 
 bot_prefix = "!"
 client = commands.Bot(command_prefix=bot_prefix)
@@ -25,12 +26,6 @@ async def on_ready():
 
 @client.command()
 async def test(ctx):
-    #await ctx.send("Hello, this is a test!")
-    #userID = ctx.message.author.id
-    #userName = ctx.message.author.name
-    #await ctx.send("Thank you {} , id: {}".format(userName,userID))
-    #now = datetime.now().strftime('%d-%m %H:%M')
-    #await ctx.send("The current time is: {}".format(now))
     now = datetime.now().strftime('%d-%m')
     print(now)
 
@@ -39,14 +34,15 @@ async def help(ctx):
     embed = discord.Embed(title='Bot Commands')
     embed.add_field(name = '!turnips', value = 'For current prices', inline = True)
     embed.add_field(name = '!myTurnips *num*', value = 'For updating your price', inline = True)
-
+    embed.add_field(name = '!addRole *role*', value = 'For adding a role to yourself', inline = True)
+    embed.add_field(name = '!removeRole *role*', value = 'For removing a role from yourself', inline = True)
     await ctx.send(embed=embed)
 
 @client.command()
 async def turnips(ctx):
 
     formattedData = formatMethods.databaseConcatenater()
-    
+
     embed = discord.Embed(title='Turnip Prices')
     embed.add_field(name = 'Username', value = formattedData[0], inline = True)
     embed.add_field(name = 'Price', value = formattedData[1], inline = True)
@@ -90,9 +86,59 @@ async def myTurnips(ctx, newPrice):
         await ctx.send("Updating your price now!")
         dbMethods.updateEntry(userID, newPrice, now)
 
-        await ctx.send("Your new price is: {}".format(newPrice))     
+        await ctx.send("Your new price is: {}".format(newPrice))
+
+        notif = genericBot.PriceCheck(int(newPrice))
+        user = ctx.message.author
+        roleList = user.guild.roles
+
+        if notif == 0:
+            role = genericBot.searchRoles(roleList, "LF-Low")
+            mentions = role.mention
+        elif notif == 1:
+            role = genericBot.searchRoles(roleList, "LF-Low")
+            mentions = role.mention
+            role = genericBot.searchRoles(roleList, "LF-Mid")
+            mentions += role.mention
+        elif notif == 2:
+            role = genericBot.searchRoles(roleList, "LF-Low")
+            mentions = role.mention
+            role = genericBot.searchRoles(roleList, "LF-Mid")
+            mentions += role.mention
+            role = genericBot.searchRoles(roleList, "LF-High")
+            mentions += role.mention
+        
+        try:
+            await ctx.send(mentions)
+        except:
+            pass
 
         await turnips(ctx)
+
+@client.command()
+async def addRole(ctx, role):
+    user = ctx.message.author
+    roleList = user.guild.roles
+
+    newRole = genericBot.searchRoles(roleList, role)
+    if newRole != None:
+        await user.add_roles(newRole)
+        await ctx.send("Enjoy your new role!")
+    else:
+        await ctx.send("That isn't a role! Current roles you can have are: Villager, LF-Low, LF-Mid, LF-High")
+
+@client.command()
+async def removeRole(ctx, role):
+    user = ctx.message.author
+    roleList = user.guild.roles
+
+    newRole = genericBot.searchRoles(roleList, role)
+
+    if newRole != None:
+        await user.remove_roles(newRole)
+        await ctx.send("Role has been removed")
+    else:
+        await ctx.send("That isn't a role! Current roles you can have are: Villager, LF-Low, LF-Mid, LF-High")
 
 @client.event
 async def on_message(message):
