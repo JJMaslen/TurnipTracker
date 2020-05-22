@@ -1,1 +1,0 @@
-Put your database in this db folder :)

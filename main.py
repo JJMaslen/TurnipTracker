@@ -23,6 +23,8 @@ async def on_ready():
     print("TD: {}".format(client.user.id))
     #dbMethods.createTable()
     #dbMethods.editTable()
+    #dbMethods.createTable_weekPrices()
+    #formatMethods.dayDeterminer()
 
 @client.command()
 async def test(ctx):
@@ -73,7 +75,7 @@ async def myTurnips(ctx, newPrice):
         userName = ctx.message.author.name
         now = datetime.now().strftime('%d-%m %H:%M')
 
-        data = dbMethods.readTable()
+        data = dbMethods.readTable_turnipTable()
         inDatabase = False
         for row in data:
             if row[0] == userID:
@@ -81,10 +83,10 @@ async def myTurnips(ctx, newPrice):
             
         if inDatabase == False:
             await ctx.send("You're not in my database, I'm adding you now!")
-            dbMethods.addEntry(userID, userName, newPrice, now)
+            dbMethods.addEntry_turnipTable(userID, userName, newPrice, now)
 
         await ctx.send("Updating your price now!")
-        dbMethods.updateEntry(userID, newPrice, now)
+        dbMethods.updateEntry_turnipTable(userID, newPrice, now)
 
         await ctx.send("Your new price is: {}".format(newPrice))
 

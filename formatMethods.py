@@ -2,8 +2,17 @@ from datetime import datetime
 
 import dbMethods
 
+def dayDeterminer():
+    currentWeekDay = datetime.now().weekday()
+    currentTime = datetime.now().strftime('%H')
+
+    if currentWeekDay == 0 and currentTime < 12:
+        sql = '''  '''
+    
+    return sql
+
 def databaseConcatenater():
-    data = dbMethods.readTable()
+    data = dbMethods.readTable_turnipTable()
 
     nameColumn = ""
     valueColumn = ""
