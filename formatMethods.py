@@ -2,16 +2,7 @@ from datetime import datetime
 
 import dbMethods
 
-def dayDeterminer():
-    currentWeekDay = datetime.now().weekday()
-    currentTime = datetime.now().strftime('%H')
-
-    if currentWeekDay == 0 and currentTime < 12:
-        sql = '''  '''
-    
-    return sql
-
-def databaseConcatenater():
+def databaseConcatenaterTurnipTable():
     data = dbMethods.readTable_turnipTable()
 
     nameColumn = ""
@@ -41,6 +32,15 @@ def databaseConcatenater():
     updateColumn = dataFormatterYellow(updateColumn)
     
     return nameColumn,valueColumn,updateColumn
+
+def databaseConcatenaterWeekPrices(id):
+    data = dbMethods.readTable_weekPrices()
+
+    for row in data:
+        if id == row[0]:
+            output = row
+
+    return output
 
 def dataFormatterGreen(text):
     startFormat = "```css\n"

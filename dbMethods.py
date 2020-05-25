@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 from sqlite3 import Error
 
 def create_connection(db_file):
@@ -51,7 +52,9 @@ def createTable_weekPrices():
                                         thursdayAM integer,
                                         thursdayPM integer,
                                         fridayAM integer,
-                                        fridayPM integer
+                                        fridayPM integer,
+                                        saturdayAM integer,
+                                        saturdayPM integer
                                     ); """
     
     conn = create_connection(database)
@@ -106,17 +109,6 @@ def addEntry_turnipTable(id, userName, price, currentTime):
         NewEntry = (id, userName, price, currentTime)
         add_entry(conn, NewEntry, sql)
 
-def addEntry_weekPrices(id, userName, price, dayTime):
-    file = open("weekPricesPath.txt","r")
-    database = str(file.read())
-    file.close()
-
-    sql = 0 #call method here
-    conn = create_connection(database)
-    with conn:
-        NewEntry = (id, userName, price)
-        add_entry(conn, NewEntry, sql)
-
 def updateEntry_turnipTable(id, price, currentTime):
     file = open("databasePath.txt", "r")
     database = str(file.read())
@@ -130,6 +122,108 @@ def updateEntry_turnipTable(id, price, currentTime):
     with conn:
         update_entry(conn, (price, currentTime, id), sql)
 
+def addEntry_weekPrices(id, userName):
+    file = open("weekPricesPath.txt","r")
+    database = str(file.read())
+    file.close()
+
+    sql = ''' INSERT INTO weekPrices(id, name)
+              VALUES(?,?) '''
+    conn = create_connection(database)
+    with conn:
+        NewEntry = (id, userName)
+        add_entry(conn, NewEntry, sql)
+
+def updateEntry_weekPrices(id, price):
+    file = open("weekPricesPath.txt","r")
+    database = str(file.read())
+    file.close()
+
+    sql = dayDeterminer()
+    conn = create_connection(database)
+    with conn:
+        NewEntry = (price, id)
+        update_entry(conn, NewEntry, sql)
+
+def dayDeterminer():
+    currentWeekDay = datetime.now().weekday()
+    currentTime = int(datetime.now().strftime('%H'))
+    sql = ''' '''
+
+    if currentWeekDay == 0 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET mondayAM = ? ,
+                  WHERE id = ?'''
+        print("Monday Morning")
+    
+    if currentWeekDay == 0 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET mondayPM = ?
+                  WHERE id = ?'''
+        print("Monday Afternoon")
+    
+    if currentWeekDay == 1 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET tuesdayAM = ? ,
+                  WHERE id = ?'''
+        print("Tuesday Morning")
+    
+    if currentWeekDay == 1 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET tuesdayPM = ? ,
+                  WHERE id = ?'''
+        print("Tuesday Afternoon")
+
+    if currentWeekDay == 2 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET wednesdayAM = ? ,
+                  WHERE id = ?'''
+        print("Wednesday Morning")
+    
+    if currentWeekDay == 2 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET wednesdayPM = ? ,
+                  WHERE id = ?'''
+        print("Wednesday Afternoon")
+
+    if currentWeekDay == 3 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET thursdayAM = ? ,
+                  WHERE id = ?'''
+        print("Thursday Morning")
+    
+    if currentWeekDay == 3 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET thursdayPM = ? ,
+                  WHERE id = ?'''
+        print("Thursday Afternoon")
+    
+    if currentWeekDay == 4 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET fridayAM = ? ,
+                  WHERE id = ?'''
+        print("Friday Morning")
+    
+    if currentWeekDay == 4 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET fridayPM = ? ,
+                  WHERE id = ?'''
+        print("Friday Afternoon")
+
+    if currentWeekDay == 5 and currentTime < 12:
+        sql = ''' UPDATE weekPrices
+                  SET saturdayAM = ? ,
+                  WHERE id = ?'''
+        print("Saturday Morning")
+    
+    if currentWeekDay == 5 and currentTime >= 12:
+        sql = ''' UPDATE weekPrices
+                  SET saturdayPM = ? ,
+                  WHERE id = ?'''
+        print("Saturday Afternoon")
+
+    return sql
+
 def readTable_turnipTable():
     file = open("databasePath.txt", "r")
     database = str(file.read())
@@ -138,6 +232,17 @@ def readTable_turnipTable():
     sql = '''SELECT * FROM turnipTable
              ORDER BY 
                 price DESC'''
+    conn = create_connection(database)
+    with conn:
+        data = read_table(conn, sql)
+    return data
+
+def readTable_weekPrices():
+    file = open("weekPricesPath.txt","r")
+    database = str(file.read())
+    file.close()
+
+    sql = '''SELECT * FROM weekPrices'''
     conn = create_connection(database)
     with conn:
         data = read_table(conn, sql)
