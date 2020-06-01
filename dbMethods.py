@@ -152,7 +152,7 @@ def dayDeterminer():
 
     if currentWeekDay == 0 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET mondayAM = ? ,
+                  SET mondayAM = ?
                   WHERE id = ?'''
         print("Monday Morning")
     
@@ -164,61 +164,61 @@ def dayDeterminer():
     
     if currentWeekDay == 1 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET tuesdayAM = ? ,
+                  SET tuesdayAM = ?
                   WHERE id = ?'''
         print("Tuesday Morning")
     
     if currentWeekDay == 1 and currentTime >= 12:
         sql = ''' UPDATE weekPrices
-                  SET tuesdayPM = ? ,
+                  SET tuesdayPM = ?
                   WHERE id = ?'''
         print("Tuesday Afternoon")
 
     if currentWeekDay == 2 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET wednesdayAM = ? ,
+                  SET wednesdayAM = ?
                   WHERE id = ?'''
         print("Wednesday Morning")
     
     if currentWeekDay == 2 and currentTime >= 12:
         sql = ''' UPDATE weekPrices
-                  SET wednesdayPM = ? ,
+                  SET wednesdayPM = ?
                   WHERE id = ?'''
         print("Wednesday Afternoon")
 
     if currentWeekDay == 3 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET thursdayAM = ? ,
+                  SET thursdayAM = ?
                   WHERE id = ?'''
         print("Thursday Morning")
     
     if currentWeekDay == 3 and currentTime >= 12:
         sql = ''' UPDATE weekPrices
-                  SET thursdayPM = ? ,
+                  SET thursdayPM = ?
                   WHERE id = ?'''
         print("Thursday Afternoon")
     
     if currentWeekDay == 4 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET fridayAM = ? ,
+                  SET fridayAM = ?
                   WHERE id = ?'''
         print("Friday Morning")
     
     if currentWeekDay == 4 and currentTime >= 12:
         sql = ''' UPDATE weekPrices
-                  SET fridayPM = ? ,
+                  SET fridayPM = ?
                   WHERE id = ?'''
         print("Friday Afternoon")
 
     if currentWeekDay == 5 and currentTime < 12:
         sql = ''' UPDATE weekPrices
-                  SET saturdayAM = ? ,
+                  SET saturdayAM = ?
                   WHERE id = ?'''
         print("Saturday Morning")
     
     if currentWeekDay == 5 and currentTime >= 12:
         sql = ''' UPDATE weekPrices
-                  SET saturdayPM = ? ,
+                  SET saturdayPM = ?
                   WHERE id = ?'''
         print("Saturday Afternoon")
 
